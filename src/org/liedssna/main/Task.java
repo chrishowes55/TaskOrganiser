@@ -1,30 +1,30 @@
 package org.liedssna.main;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Task {
   private String name;
-  private Date date;
+  private Calendar cal;
 
-  public Task(String name, Date date) {
+  public Task(String name, Calendar cal) {
     this.name = singleWord(name);
-    this.date = date;
+    this.cal = cal;
   }
   
   public String getName() {
     return name;
   }
   
-  public Date getDeadline() {
-    return date;
+  public Calendar getDeadline() {
+    return cal;
   }
   
   public void setName(String name) {
     this.name = name;
   }
   
-  public void setDeadline(Date date) {
-    this.date = date;
+  public void setDeadline(Calendar cal) {
+    this.cal = cal;
   }
   
   private String singleWord(String init) {
