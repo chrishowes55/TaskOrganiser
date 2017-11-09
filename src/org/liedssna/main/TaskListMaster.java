@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
@@ -31,6 +30,8 @@ public class TaskListMaster {
 		if (worked == 1) {
 			System.out.println("Please try again: That name is taken");
 		}
+		
+		scanner.close();
 	}
 
 	private int[] makeDateArray(String values) {
@@ -51,22 +52,22 @@ public class TaskListMaster {
 	}
 
 	private int onTaskCreation(Task task) {
-		boolean createdNew = false;
 		File file = new File("/tmp/taskOrganiser/task.txt");
 		file.getParentFile().mkdirs();
 		try {
 			file.createNewFile();
-			createdNew = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		BufferedReader br = null;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(file));
+			br = new BufferedReader(new FileReader(file));
 			for (String line = br.readLine(); line != null; line = br.readLine()) {
 				if (line.substring(0, task.getName().length()).equals(task.getName())) {
 					return 1; // already a task with that name
 				}
 			}
+			
 			PrintWriter out = new PrintWriter(new FileWriter(file, true));
 
 			out.append(task.getName() + "_" + task.getDeadline().get(Calendar.DAY_OF_MONTH) + "_"
@@ -75,7 +76,16 @@ public class TaskListMaster {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} finally {
+            if(br != null){
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("--- File End ---");
+        }
 		tasks.add(task);
 		return 0;
 	}
