@@ -84,7 +84,6 @@ public class TaskListMaster {
                     e.printStackTrace();
                 }
             }
-            System.out.println("--- File End ---");
         }
 		tasks.add(task);
 		return 0;
