@@ -17,18 +17,37 @@ public class TaskListMaster {
 
 	public void start() {
 		Scanner scanner = new Scanner(System.in);
-
-		System.out.println("Please Create a Task:");
-		System.out.println("Date first please (DD/MM/YYYY)");
-		String dateValues = scanner.nextLine().replaceAll("[^0-9]", "");
-		int[] dateArray = makeDateArray(dateValues);
-		Calendar cal = new GregorianCalendar(dateArray[2], dateArray[1] - 1, dateArray[0]);
-
-		System.out.println("Thank you! Now please enter the name of the Task:");
-		String taskName = scanner.nextLine();
-		int worked = onTaskCreation(new Task(taskName, cal));
-		if (worked == 1) {
-			System.out.println("Please try again: That name is taken");
+		
+		boolean running = true;
+		
+		while (running) {
+			System.out.println("What would you like to do? Enter 0 to exit, or 1 for Task Creation");
+			int input = scanner.nextInt();
+			
+			switch (input) {
+				case 0:
+					running = false;
+					break;
+					
+				case 1:
+					System.out.println("Please Create a Task:");
+					System.out.println("Date first please (DD/MM/YYYY)");
+					String dateValues = scanner.next().replaceAll("[^0-9]", "");
+					int[] dateArray = makeDateArray(dateValues);
+					Calendar cal = new GregorianCalendar(dateArray[2], dateArray[1] - 1, dateArray[0]);
+			
+					System.out.println("Thank you! Now please enter the name of the Task:");
+					String taskName = scanner.next();
+					int worked = onTaskCreation(new Task(taskName, cal));
+					if (worked == 1) {
+						System.out.println("Please try again: That name is taken");
+					}
+					break;
+				
+				default:
+					System.out.println("Invalid choice");
+					break;
+			}
 		}
 		
 		scanner.close();
