@@ -13,8 +13,6 @@ import java.util.Scanner;
 
 public class TaskListMaster {
 
-	private ArrayList<Task> tasks = new ArrayList<Task>();
-
 	public void start() {
 		Scanner scanner = new Scanner(System.in);
 		
@@ -104,7 +102,51 @@ public class TaskListMaster {
                 }
             }
         }
-		tasks.add(task);
 		return 0;
+	}
+	
+	private Task findTask(String name) {
+		File file = new File("/tmp/taskOrganiser/task.txt");
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			for (String line = br.readLine(); line != null; line = br.readLine()) {
+				if (line.substring(0, name.length()).equals(name)) {
+					String month;	// gets defined later
+					// read day
+					String day = line.substring(name.length() + 1, 
+							(name.length() + 3) + 1 /*endIndex + 1*/);
+					String origMonth = line.substring(name.length() + 3, (name.length() + 5) + 1);
+					// month has no 0
+					if(origMonth.substring(1).equals('_')) {
+						month = "0" + origMonth.substring(0, origMonth.length() - 1);
+					} else {
+						month = origMonth;
+					}
+					String year = line.substring(name.length() + 5);
+					
+					int[] date = makeDateArray(day+month+year);
+					
+					return new Task(name, new GregorianCalendar(date[2], date[1], date[0]));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+            if(br != null){
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+		return null;
+	}
+	
+	private void onTaskDeletion(Task task) {
+		if(task.exists()) {
+			
+		}
 	}
 }
