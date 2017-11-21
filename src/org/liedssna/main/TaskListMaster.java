@@ -19,7 +19,7 @@ public class TaskListMaster {
 		boolean running = true;
 
 		while (running) {
-			System.out.println("What would you like to do? Enter 0 to exit, 1 for Task Creation, or 2 for Task Deletion");
+			System.out.println("What would you like to do? Enter 0 to exit, 1 for Task Creation, 2 for Task Deletion, or 3 for a list of tasks");
 			int input = Integer.parseInt(scanner.nextLine());
 
 			switch (input) {
@@ -46,6 +46,10 @@ public class TaskListMaster {
 				System.out.println("Enter the name of the task you wish to delete");
 				String name = scanner.next();
 				onTaskDeletion(findTask(name));
+				break;
+				
+			case 3:
+				System.out.println(getListOfTasks());
 				break;
 
 			default:
@@ -184,5 +188,49 @@ public class TaskListMaster {
 				tempFile.renameTo(file);
 			}
 		}
+	}
+	
+	public String getListOfTasks() {
+		File file = new File("/tmp/taskOrganiser/task.txt");
+		if (!file.exists()) {
+			return "The requested file does not exist";
+		}
+		BufferedReader br = null;
+		try {
+			StringBuilder sb = new StringBuilder();
+			br = new BufferedReader(new FileReader(file));
+			for (String line = br.readLine(); line!=null; line = br.readLine()) {
+				String[] stuff = line.split("_");
+				sb.append("Name: " + toNormal(stuff[0]) + " Deadline: " + stuff[1] + "/" + stuff[2] + "/" + stuff[3] + "\n");
+			}
+			return sb.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return "Something went wrong :-(";
+	}
+	
+	private String toNormal(String input) {
+		String result = "";
+		for (int i = 0; i < input.length(); i++) {
+            char currentChar = input.charAt(i);
+            if (i == 0) {
+				result = result + currentChar;
+			}
+            else if (currentChar == Character.toUpperCase(currentChar)) {
+                result = result + " " + currentChar;
+            } else {
+                result = result + currentChar;
+            }
+        }
+		return result;
 	}
 }
