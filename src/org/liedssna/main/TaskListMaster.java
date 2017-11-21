@@ -90,7 +90,7 @@ public class TaskListMaster {
 		try {
 			br = new BufferedReader(new FileReader(file));
 			for (String line = br.readLine(); line != null; line = br.readLine()) {
-				if (line.substring(0, task.getName().length()).equals(task.getName())) {
+				if (line.substring(0, line.indexOf("_")).equals(task.getName())) {
 					return 1; // already a task with that name
 				}
 			}
@@ -166,7 +166,7 @@ public class TaskListMaster {
 				br = new BufferedReader(new FileReader(file));
 				for (String line = br.readLine(); line != null; line = br.readLine()) {
 					System.out.println("for");
-					if (!line.substring(0, task.getName().length()).equals(task.getName())) {
+					if (!line.substring(0, line.indexOf("_")).equals(task.getName())) {
 						System.out.println("for if");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
 						String trimmedLine = line.trim();
@@ -227,7 +227,8 @@ public class TaskListMaster {
 			}
             else if (currentChar == Character.toUpperCase(currentChar)) {
                 result = result + " " + currentChar;
-            } else {
+            }
+            else {
                 result = result + currentChar;
             }
         }
