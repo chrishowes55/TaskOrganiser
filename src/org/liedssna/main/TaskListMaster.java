@@ -117,7 +117,7 @@ public class TaskListMaster {
 		try {
 			br = new BufferedReader(new FileReader(file));
 			for (String line = br.readLine(); line != null; line = br.readLine()) {
-				if (line.substring(0, name.length()).equals(name)) {
+				if (line.length() > name.length() && line.substring(0, name.length() - 1).equals(name)) {
 					String month; // gets defined later
 					// read day
 					String day = line.substring(name.length() + 1, (name.length() + 3) + 1 /* endIndex + 1 */);
