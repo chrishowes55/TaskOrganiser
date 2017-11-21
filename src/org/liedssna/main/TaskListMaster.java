@@ -19,8 +19,8 @@ public class TaskListMaster {
 		boolean running = true;
 
 		while (running) {
-			System.out.println("What would you like to do? Enter 0 to exit, or 1 for Task Creation");
-			int input = Integer.parseInt(scanner.next());
+			System.out.println("What would you like to do? Enter 0 to exit, 1 for Task Creation, or 2 for Task Deletion");
+			int input = Integer.parseInt(scanner.nextLine());
 
 			switch (input) {
 			case 0:
@@ -30,12 +30,12 @@ public class TaskListMaster {
 			case 1:
 				System.out.println("Please Create a Task:");
 				System.out.println("Date first please (DD/MM/YYYY)");
-				String dateValues = scanner.next().replaceAll("[^0-9]", "");
+				String dateValues = scanner.nextLine().replaceAll("[^0-9]", "");
 				int[] dateArray = makeDateArray(dateValues);
 				Calendar cal = new GregorianCalendar(dateArray[2], dateArray[1] - 1, dateArray[0]);
 
 				System.out.println("Thank you! Now please enter the name of the Task:");
-				String taskName = scanner.next();
+				String taskName = scanner.nextLine();
 				int worked = onTaskCreation(new Task(taskName, cal));
 				if (worked == 1) {
 					System.out.println("Please try again: That name is taken");
@@ -46,13 +46,11 @@ public class TaskListMaster {
 				System.out.println("Enter the name of the task you wish to delete");
 				String name = scanner.next();
 				onTaskDeletion(findTask(name));
+				break;
 
 			default:
-				System.out.println("Enter the name of the task you wish to delete");
-				String n = scanner.next();
-				onTaskDeletion(findTask(n));
-				// System.out.println("Invalid choice");
-				// break;
+				System.out.println("Invalid choice");
+				break;
 			}
 		}
 
@@ -155,22 +153,27 @@ public class TaskListMaster {
 
 	private void onTaskDeletion(Task task) {
 		if (task != null && task.exists()) {
+			System.out.println("Task isn't null and exists");
 			File file = new File("/tmp/taskOrganiser/task.txt");
 			File tempFile = new File("/tmp/taskOrganiser/tempTask.txt");
 			BufferedReader br = null;
 			try {
+				System.out.println("In try");
 				br = new BufferedReader(new FileReader(file));
 				for (String line = br.readLine(); line != null; line = br.readLine()) {
-					if (line.substring(0, task.getName().length()).equals(task.getName())) {
+					System.out.println("for");
+					if (!line.substring(0, task.getName().length()).equals(task.getName())) {
+						System.out.println("for if");
 						BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
 						String trimmedLine = line.trim();
-					    bw.write(line + System.getProperty("line.separator"));
+					    bw.write(trimmedLine + System.getProperty("line.separator"));
 						bw.close();
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
+				System.out.println("finally");
 				if (br != null) {
 					try {
 						br.close();

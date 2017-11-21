@@ -31,24 +31,25 @@ public class Task {
 		this.cal = cal;
 	}
 
-	private String singleWord(String init) {
-		if (init == null)
-			return null;
-
-		final StringBuilder ret = new StringBuilder(init.length());
-
-		for (final String word : init.split(" ")) {
-			if (!word.isEmpty()) {
-				ret.append(word.substring(0, 1).toUpperCase());
-				ret.append(word.substring(1).toLowerCase());
-			}
-			if (!(ret.length() == init.length()))
-				ret.append(" ");
+	private String singleWord(String input) {
+		input = input.toLowerCase();
+		if(input != null) {
+			char firstChar = input.charAt(0);
+			String result = "";
+	        result += Character.toUpperCase(firstChar);
+	        for (int i = 1; i < input.length(); i++) {
+	            char currentChar = input.charAt(i);
+	            char previousChar = input.charAt(i - 1);
+	            if (previousChar == ' ') {
+	                result = result + Character.toUpperCase(currentChar);
+	            } else {
+	                result = result + currentChar;
+	            }
+	        }
+	        result = result.replaceAll("[^A-Z,a-z]", "");
+	        return result;
 		}
-		String result = ret.toString();
-		result = result.replaceAll("[^A-Za-z]", "");
-
-		return result;
+		return "ThatWasNotAGoodName";
 	}
 	
 	public boolean exists() {
